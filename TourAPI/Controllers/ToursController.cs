@@ -63,25 +63,25 @@ namespace TourAPI.Controllers
             return Ok("Tur Başarı ile Eklendi");
         }
 
-        // PUT: api/tours/5
-        // Var olan turu gunceller
-        [HttpPut]
-        public async Task<IActionResult> Update(Tour updatedTour)
+        // PUT: api/tours/1
+        // Var olan turu guncel
+        
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, createTourDTO updatedTourDto)
         {
-            var existingTour = await _context.Tours.FirstOrDefaultAsync(x => x.Id == updatedTour.Id);
+            var existingTour = await _context.Tours.FirstOrDefaultAsync(x => x.Id == id);
+
             if (existingTour == null)
             {
-                return NotFound();
+                return NotFound("Güncellenecek tur bulunamadı.");
             }
-
-            // Guncelleme islemi
-            existingTour.Title = updatedTour.Title;
-            existingTour.Price = updatedTour.Price;
-            existingTour.StartDate = updatedTour.StartDate;
-            existingTour.FinishDate = updatedTour.FinishDate;
+            existingTour.Title = updatedTourDto.Title;
+            existingTour.Price = updatedTourDto.Price;
+            existingTour.StartDate = updatedTourDto.StartDate;
+            existingTour.FinishDate = updatedTourDto.FinishDate;
 
             await _context.SaveChangesAsync();
-            return NoContent(); // 204 Doner (Basarili ama icerik yok)
+            return NoContent();
         }
 
         // DELETE: api/tours/5
